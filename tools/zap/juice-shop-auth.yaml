@@ -1,0 +1,74 @@
+env:
+  contexts:
+    - name: juice-shop-auth
+      urls:
+        - http://localhost:3001
+      includePaths:
+        - "http://localhost:3001.*"
+      excludePaths:
+        - ".*\\.png"
+        - ".*\\.jpg"
+        - ".*\\.svg"
+        - ".*\\.woff2?"
+      authentication:
+        method: json
+        parameters:
+          loginPageUrl: http://localhost:3001/#/login
+          loginRequestUrl: http://localhost:3001/rest/user/login
+          loginRequestBody: '{"email":"{%username%}","password":"{%password%}"}'
+        verification:
+          method: response
+          loggedInRegex: '"authentication"'
+          loggedOutRegex: '"error"'
+      sessionManagement:
+        method: cookie
+      users:
+        - name: student
+          credentials:
+            username: student@juice-sh.op
+            password: Student!23
+  parameters:
+    failOnError: false
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+
+  - type: spider
+    parameters:
+      context: juice-shop-auth
+      user: student
+      maxDuration: 3
+
+  - type: spiderAjax
+    parameters:
+      context: juice-shop-auth
+      user: student
+      maxDuration: 3
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 3
+
+  - type: report
+    parameters:
+      template: traditional-xml
+      reportDir: /zap/wrk
+      reportFile: juice-shop.af.xml
+      reportTitle: ZAP Auth Scan Report
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk
+      reportFile: juice-shop.af.html
+      reportTitle: ZAP Auth Scan Report
+
+  - type: report
+    parameters:
+      template: traditional-json-plus
+      reportDir: /zap/wrk
+      reportFile: juice-shop.af.json
+      reportTitle: ZAP Auth Scan Report

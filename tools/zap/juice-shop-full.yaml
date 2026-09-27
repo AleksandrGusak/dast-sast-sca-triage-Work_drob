@@ -1,0 +1,50 @@
+env:
+  contexts:
+    - name: juice-shop
+      urls:
+        - http://localhost:3001
+      includePaths:
+        - "http://localhost:3001.*"
+  parameters:
+    failOnError: false
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+
+  - type: spider
+    parameters:
+      url: http://localhost:3001
+      maxDuration: 5
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: activeScan
+    parameters:
+      url: http://localhost:3001
+      maxScanDurationInMins: 10
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk
+      reportFile: juice-shop.full.html
+      reportTitle: ZAP Full Scan Report
+
+  - type: report
+    parameters:
+      template: traditional-xml
+      reportDir: /zap/wrk
+      reportFile: juice-shop.full.xml
+      reportTitle: ZAP Full Scan Report
+
+  - type: report
+    parameters:
+      template: traditional-json-plus
+      reportDir: /zap/wrk
+      reportFile: juice-shop.full.json
+      reportTitle: ZAP Full Scan Report

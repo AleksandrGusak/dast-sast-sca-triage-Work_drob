@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+.env
+.idea/
+.vscode/
+*.iml
+*.log
+db.sqlite3
+.DS_Store
+targets/juice-shop/
+targets/webgoat/
+tools/defectdojo/

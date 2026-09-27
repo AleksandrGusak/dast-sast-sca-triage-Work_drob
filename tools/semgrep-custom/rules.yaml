@@ -1,0 +1,16 @@
+rules:
+  - id: custom-no-eval
+    pattern: eval(...)
+    message: "Обнаружен вызов eval(). Использование eval() небезопасно - потенциальный RCE"
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+
+  - id: custom-no-console-log
+    pattern: console.log(...)
+    message: "Обнаружен console.log. Убедитесь, что не логируются чувствительные данные"
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING

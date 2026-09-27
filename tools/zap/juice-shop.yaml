@@ -1,0 +1,49 @@
+env:
+  contexts:
+    - name: baseline
+      urls:
+        - http://localhost:3001
+      excludePaths: []
+  parameters:
+    failOnError: false
+    progressToStdout: true
+
+jobs:
+  - type: passiveScan-config
+    parameters:
+      maxAlertsPerRule: 10
+
+  - type: spider
+    parameters:
+      url: http://localhost:3001
+      maxDuration: 5
+
+  - type: spiderAjax
+    parameters:
+      url: http://localhost:3001
+      maxDuration: 5
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk
+      reportFile: juice-shop.baseline.html
+      reportTitle: ZAP Baseline Report
+
+  - type: report
+    parameters:
+      template: traditional-xml
+      reportDir: /zap/wrk
+      reportFile: juice-shop.baseline.xml
+      reportTitle: ZAP Baseline Report
+
+  - type: report
+    parameters:
+      template: traditional-json-plus
+      reportDir: /zap/wrk
+      reportFile: juice-shop.baseline.json
+      reportTitle: ZAP Baseline Report
